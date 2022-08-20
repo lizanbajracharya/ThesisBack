@@ -26,7 +26,7 @@ const postRate = asyncHandler(async (req, res) => {
 // @access   Private/Admin
 const updateRate = asyncHandler(async (req, res) => {
   const { price } = req.body;
-
+  console.log(price);
   const goldRate = await Rate.findById(req.params.id);
 
   if (goldRate) {
@@ -39,4 +39,19 @@ const updateRate = asyncHandler(async (req, res) => {
   }
 });
 
-export { getRate, postRate, updateRate };
+// @desc     delete rate
+// @route    DELETE api/rate/:id
+// @access   Private/Admin
+const deleteRate = asyncHandler(async (req, res) => {
+  const user = await Rate.findById(req.params.id);
+
+  if (user) {
+    await user.remove();
+    res.json({ message: "Rate Removed" });
+  } else {
+    res.status(404);
+    throw new Error("Rate not found");
+  }
+});
+
+export { getRate, postRate, updateRate, deleteRate };

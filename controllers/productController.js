@@ -5,11 +5,6 @@ import Product from "../models/productModel.js";
 // @route   GET api/product
 // @access   Public
 const getProducts = asyncHandler(async (req, res) => {
-  const price = req.query.price
-    ? {
-        price: req.query.price,
-      }
-    : "";
   const keyword = req.query.keyword
     ? {
         name: {
@@ -21,7 +16,6 @@ const getProducts = asyncHandler(async (req, res) => {
 
   const products = await Product.find({
     ...keyword,
-    ...price,
   });
 
   res.json({ products });
@@ -138,16 +132,18 @@ const deleteProduct = asyncHandler(async (req, res) => {
 // @route    POST api/products
 // @access   Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, category, countInStock } = req.body;
+  const { name, weight, description, image, category, countInStock, code } =
+    req.body;
   const product = new Product({
     name: name,
-    price: price,
+    weight: weight,
     user: req.user._id,
     image: image,
     category: category,
     countInStock: countInStock,
     numReviews: 0,
     description: description,
+    code: code,
   });
 
   const createdProduct = await product.save();
@@ -158,15 +154,16 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route    PUT api/products/:id
 // @access   Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, countInStock } = req.body;
+  const { name, weight, description, image, countInStock, code } = req.body;
 
   const product = await Product.findById(req.params.id);
 
   if (product) {
     product.name = name;
-    product.price = price;
+    product.weight = weight;
     product.description = description;
     product.image = image;
+    product.code = code;
     product.countInStock = countInStock;
     const updatedProduct = await product.save();
     res.json(updatedProduct);

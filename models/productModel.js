@@ -36,6 +36,10 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    code: {
+      type: String,
+      required: true,
+    },
     image: {
       type: String,
     },
@@ -60,7 +64,7 @@ const productSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
-    price: {
+    weight: {
       type: Number,
       required: true,
       default: 0,
